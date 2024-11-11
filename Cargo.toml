@@ -8,6 +8,7 @@ name = "riscv_emulator"
 path = "src/main.rs"
 
 [dependencies]
+bitbybit = "1.3.2"
 
 [dev-dependencies]
 rand = "0.8.5"

@@ -1,1 +1,2 @@
-pub mod formats;
+mod formats;
+pub mod decoder;
