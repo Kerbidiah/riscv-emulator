@@ -1,4 +1,5 @@
-mod r;
-mod i;
+pub mod r;
+pub mod i;
+pub mod s;
 
-use super::formats::InstructionFormat;
+mod imm;

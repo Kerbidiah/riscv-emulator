@@ -1,5 +1,7 @@
 // only impelementing I and M extentions
 
+use arbitrary_int::u7;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum InstructionFormat {
 	R,
@@ -11,23 +13,43 @@ pub enum InstructionFormat {
 }
 
 impl InstructionFormat {
-	pub const MASK: u8 = 0b0111_1111;
+	// op code bit patterns
+
+	const R0: u7 = u7::new(0b011_0011);
+
+	const I0: u7 = u7::new(0b001_0011);
+	const I1: u7 = u7::new(0b000_0011);
+	const I2: u7 = u7::new(0b110_0111);
+	const I3: u7 = u7::new(0b111_0011);
+
+	const S0: u7 = u7::new(0b010_0011);
+
+	const B0: u7 = u7::new(0b110_0011);
+	
+	const U0: u7 = u7::new(0b011_0111);
+	const U1: u7 = u7::new(0b001_0111);
+
+	const J0: u7 = u7::new(0b1101111);
+}
+
+impl From<u7> for InstructionFormat {
+	fn from(opcode: u7) -> Self {
+		match opcode {
+			Self::R0 => Self::R,
+			Self::I0 | Self::I1 | Self::I2 | Self::I3 => Self::I,
+			Self::S0 => Self::S,
+			Self::B0 => Self::B,
+			Self::U0 | Self::U1 => Self::U,
+			Self::J0 => Self::J,
+			_ => unimplemented!()
+		}
+	}
 }
 
 impl From<u8> for InstructionFormat {
+	#[inline]
 	fn from(value: u8) -> Self {
-		let opcode = value & Self::MASK;
-		match opcode {
-			0b0011_0011 => Self::R,
-			0b0001_0011 | 0b0000_0011 | 0b0110_0111 | 0b0111_0011 => Self::I,
-			0b0010_0011 => Self::S,
-			0b0110_0011 => Self::B,
-			0b0011_0111 | 0b0001_0111 => Self::U,
-			0b01101111 => Self::J,
-
-			0b1000_0000..=u8::MAX => unreachable!(),
-			_ => unimplemented!()
-		}
+		u7::extract_u8(value, 0).into()
 	}
 }
 

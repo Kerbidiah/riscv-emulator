@@ -110,6 +110,7 @@ dependencies = [
 name = "rv_em"
 version = "0.1.0"
 dependencies = [
+ "arbitrary-int",
  "bitbybit",
  "rand",
 ]

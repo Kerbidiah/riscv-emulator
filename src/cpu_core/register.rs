@@ -1,5 +1,8 @@
 use std::ops::{Index, IndexMut};
 
+use bitbybit::{self, bitenum};
+use arbitrary_int;
+
 #[derive(Debug, Default)]
 pub struct Registers {
 	// x0: u32, // should always be 0
@@ -118,8 +121,8 @@ impl IndexMut<Register> for Registers {
 	}
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[repr(u8)]
+#[derive(Debug, PartialEq, Eq)]
+#[bitenum(u5, exhaustive = true)]
 pub enum Register {
 	X0 = 0,
 	X1 = 1,
@@ -159,6 +162,7 @@ impl Register {
 	const MASK: u8 = 0b0001_1111;
 }
 
+// TODO: is there a better way?
 impl From<u8> for Register {
 	fn from(value: u8) -> Self {
 		match value & Self::MASK {
